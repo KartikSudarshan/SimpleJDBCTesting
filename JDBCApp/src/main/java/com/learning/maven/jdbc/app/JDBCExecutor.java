@@ -13,13 +13,18 @@ public class JDBCExecutor {
 				"mysecretpassword");
 		try {
 			Connection connection =dcm.getConnection();
-			Statement statement=connection.createStatement();
-			ResultSet resultSet = statement.executeQuery("SELECT COUNT(*) FROM CUSTOMER");
-			
-			while (resultSet.next()) {
-				System.out.println(resultSet.getInt(1));
-			}
-			
+			 CustomerDAO customerDAO = new CustomerDAO(connection);
+	            Customer customer = new Customer();
+	            customer.setFirstname("Arthur");
+	            customer.setLastname("Morgan");
+	            customer.setEmail("arthur.morgan@red.dead.redemption");
+	            customer.setPhone("(555) 555-1234");
+	            customer.setAddress("1234 Main St");
+	            customer.setCity("Mount Vernon");
+	            customer.setState("VA");
+	            customer.setZipcode("22121");
+
+	            customerDAO.create(customer);
 		}catch (SQLException e) {
 			e.printStackTrace();
 		}
