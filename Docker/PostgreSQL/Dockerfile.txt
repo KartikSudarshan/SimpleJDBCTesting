@@ -1,0 +1,6 @@
+FROM postgres:latest
+#COPY *.sql /docker-entrypoint-initdb.d/
+COPY *.sql /PostGresData/
+ENV POSTGRES_PASSWORD=mysecretpassword
+ENV POSTGRES_USER=postgres
+RUN psql -h localhost -U postgres -d hplussport
