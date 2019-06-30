@@ -84,8 +84,7 @@ public class Customer implements DataTransferObject{
 
 	@Override
 	public long getId() {
-		// TODO Auto-generated method stub
-		return 0;
+		return this.id;
 	}
 
 }

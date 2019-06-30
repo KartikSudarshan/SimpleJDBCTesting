@@ -15,6 +15,7 @@ public class JDBCExecutor {
 			 Connection connection =dcm.getConnection();
 			 CustomerDAO customerDAO = new CustomerDAO(connection);
 			/* Creating Customer Values
+			 * 
 			 * Customer customer = new Customer(); customer.setFirstname("Arthur");
 			 * customer.setLastname("Morgan");
 			 * customer.setEmail("arthur.morgan@red.dead.redemption");
@@ -23,8 +24,22 @@ public class JDBCExecutor {
 			 * customer.setZipcode("22121");
 			 * customerDAO.create(customer);
 			 */
-			 Customer customer =customerDAO.findById(197);
-	          System.out.println(customer.getFirstname()+" "+customer.getLastname());
+			 
+			/* Reading Customer Values
+			 * 
+			 * Customer customer =customerDAO.findById(197);
+			 * System.out.println(customer.getFirstname()+" "+customer.getLastname());
+			 */
+			 
+			 Customer customer=customerDAO.findById(1000);
+			 System.out.println(customer.getFirstname()+" "+customer.getLastname()+" "+customer.getEmail());
+			 
+			 customer.setEmail("adminisnotadmin@themachine.ww");
+			 customer=customerDAO.update(customer);
+			 System.out.println(customer.getFirstname()+" "+customer.getLastname()+" "+customer.getEmail());
+			 
+			 
+			 
 		}catch (SQLException e) {
 			e.printStackTrace();
 		}

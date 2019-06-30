@@ -13,6 +13,8 @@ public class CustomerDAO extends DataAccessObject<Customer> {
 			+ "email, phone, address, city, state, zipcode) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
 	private static final String GET_ONE = "SELECT customer_id, first_name, last_name , email, "
 			+ "phone, address, city, state, zipcode FROM customer where customer_id=?";
+	private static final String UPDATE = "UPDATE customer SET first_name=?, last_name=?, email=?,"
+			+ "phone=?, address=?, city=?, state=?, zipcode=? where customer_id=?";
 
 	public CustomerDAO(Connection connection) {
 		super(connection);
@@ -20,10 +22,10 @@ public class CustomerDAO extends DataAccessObject<Customer> {
 
 	@Override
 	public Customer findById(long id) {
-		Customer customer =new Customer();
-		try(PreparedStatement statement=this.connection.prepareStatement(GET_ONE);){
+		Customer customer = new Customer();
+		try (PreparedStatement statement = this.connection.prepareStatement(GET_ONE);) {
 			statement.setLong(1, id);
-			ResultSet resultset= statement.executeQuery();
+			ResultSet resultset = statement.executeQuery();
 			while (resultset.next()) {
 				customer.setId(resultset.getLong("customer_id"));
 				customer.setFirstname(resultset.getString("first_name"));
@@ -34,14 +36,13 @@ public class CustomerDAO extends DataAccessObject<Customer> {
 				customer.setCity(resultset.getString("city"));
 				customer.setState(resultset.getString("state"));
 				customer.setZipcode(resultset.getString("zipcode"));
-				
+
 			}
-		}catch(Exception e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 			throw new RuntimeException(e);
 		}
-		
-		
+
 		return customer;
 	}
 
@@ -52,7 +53,24 @@ public class CustomerDAO extends DataAccessObject<Customer> {
 
 	@Override
 	public Customer update(Customer dto) {
-		return null;
+		Customer customer=null;
+		try (PreparedStatement statement = this.connection.prepareStatement(UPDATE);) {
+			statement.setString(1, dto.getFirstname());
+			statement.setString(2, dto.getLastname());
+			statement.setString(3, dto.getEmail());
+			statement.setString(4, dto.getPhone());
+			statement.setString(5, dto.getAddress());
+			statement.setString(6, dto.getCity());
+			statement.setString(7, dto.getState());
+			statement.setString(8, dto.getZipcode());
+			statement.setLong(9, dto.getId());
+			statement.execute();
+			customer = this.findById(dto.getId());
+		} catch (SQLException e) {
+			e.printStackTrace();
+			throw new RuntimeException(e);
+		}
+		 return customer;
 	}
 
 	@Override
@@ -67,7 +85,7 @@ public class CustomerDAO extends DataAccessObject<Customer> {
 			statement.setString(7, dto.getState());
 			statement.setString(8, dto.getZipcode());
 			statement.execute();
-			int id =this.getLastVal(CUSTOMER_SEQUENCE);
+			int id = this.getLastVal(CUSTOMER_SEQUENCE);
 			return this.findById(id);
 		} catch (SQLException e) {
 			e.printStackTrace();
