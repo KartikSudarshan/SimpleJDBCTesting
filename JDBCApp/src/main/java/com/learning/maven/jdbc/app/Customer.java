@@ -4,6 +4,13 @@ import com.learning.maven.jdbc.app.util.DataTransferObject;
 
 public class Customer implements DataTransferObject{
 	
+	@Override
+	public String toString() {
+		return "Customer [id=" + id + ", firstname=" + firstname + ", lastname=" + lastname + ", email=" + email
+				+ ", phone=" + phone + ", address=" + address + ", city=" + city + ", state=" + state + ", zipcode="
+				+ zipcode + ", toString()=" + super.toString() + "]";
+	}
+
 	private long id;
 	private String firstname;
 	private String lastname;
