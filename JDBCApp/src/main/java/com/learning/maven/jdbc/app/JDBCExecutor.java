@@ -1,16 +1,34 @@
 package com.learning.maven.jdbc.app;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
 import java.sql.Connection;
 
 import java.sql.SQLException;
+import java.util.Properties;
 
 
 public class JDBCExecutor {
 
-	public static void main(String[] args) {
+	public static void main(String[] args) throws IOException {
+		
+		FileReader propertiesReader=new FileReader("src"+File.separator+"main"+File.separator+"resources"+File.separator+"db.properties");;
+		Properties dbproperties=new Properties();
+
+		dbproperties.load(propertiesReader);
+		System.out.println("Checking the connection to the Database");
+		System.out.println("PropertiesFile is "+propertiesReader.toString());
 		System.out.println("Hello Learing JDBC");
-		DatabaseConnectionManager dcm = new DatabaseConnectionManager("localhost", "hplussport", "postgres",
-				"mysecretpassword");
+		
+		final String host=System.getProperty("database.host", dbproperties.getProperty("database.host"));
+		final String databasename=System.getProperty("postgres.database.name", dbproperties.getProperty("postgres.database.name")); 
+		final String username=System.getProperty("postgres.database.username", dbproperties.getProperty("postgres.database.username")); 
+		final String password=System.getProperty("postgres.database.password", dbproperties.getProperty("postgres.database.password"));
+		
+		DatabaseConnectionManager dcm = new DatabaseConnectionManager(host, databasename, username, password);
+		System.out.println(dcm.toString());
 		try {
 			 Connection connection =dcm.getConnection();
 			 CustomerDAO customerDAO = new CustomerDAO(connection);

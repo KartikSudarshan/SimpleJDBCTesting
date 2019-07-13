@@ -19,9 +19,14 @@ public class DatabaseConnectionManager {
 	}
 
 	public Connection getConnection() throws SQLException{
-		
+		System.out.println();
 		return DriverManager.getConnection(this.URL,this.properties);
 		
+	}
+
+	@Override
+	public String toString() {
+		return "DatabaseConnectionManager [URL=" + URL + ", properties=" + properties + "]";
 	}
 	
 }
