@@ -1,3 +1,4 @@
+CREATE IF NOT EXISTS DATABASE TestData;
 USE TestData;
 
 DROP TABLE IF EXISTS customer;
