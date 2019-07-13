@@ -84,8 +84,12 @@ public class JDBCExecutor {
 			List<Order> orders = orderDAO.getOrdersForCustomer(789);
 			orders.forEach(System.out::println);
 			
-            customerDAO.finalALLSorted(20).forEach(System.out::println);
-			
+            customerDAO.findALLSorted(20).forEach(System.out::println);
+            System.out.println("Paged");
+			for (int i=1;i<3;i++) {
+				System.out.println("Page Number: "+i);
+				customerDAO.findALLPaged(10,i).forEach(System.out::println);
+			}
 			
 		} catch (SQLException e) {
 			e.printStackTrace();
