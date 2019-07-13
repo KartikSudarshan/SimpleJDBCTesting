@@ -83,6 +83,10 @@ public class JDBCExecutor {
 			OrderDAO orderDAO = new OrderDAO(connection);
 			List<Order> orders = orderDAO.getOrdersForCustomer(789);
 			orders.forEach(System.out::println);
+			
+            customerDAO.finalALLSorted(20).forEach(System.out::println);
+			
+			
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}

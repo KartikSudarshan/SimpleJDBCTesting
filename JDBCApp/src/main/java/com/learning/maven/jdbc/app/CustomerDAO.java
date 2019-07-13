@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 import com.learning.maven.jdbc.app.util.DataAccessObject;
@@ -16,7 +17,10 @@ public class CustomerDAO extends DataAccessObject<Customer> {
 	private static final String UPDATE = "UPDATE customer SET first_name=?, last_name=?, email=?,"
 			+ "phone=?, address=?, city=?, state=?, zipcode=? where customer_id=?";
 	private static final String DELETE = "DELETE FROM customer WHERE customer_id=?";
-	
+
+	private static final String GET_ALL_LIMIT = "SELECT customer_id, first_name, last_name, email"
+			+ ", phone, address, city, state, zipcode FROM customer ORDER By Last_name, first_name LIMIT ?";
+
 	public CustomerDAO(Connection connection) {
 		super(connection);
 	}
@@ -24,7 +28,7 @@ public class CustomerDAO extends DataAccessObject<Customer> {
 	@Override
 	public Customer findById(long id) {
 		Customer customer = new Customer();
-		try (PreparedStatement statement = this.connection.prepareStatement(GET_ONE);) {
+		try (PreparedStatement statement = this.connection.prepareStatement(GET_ONE)) {
 			statement.setLong(1, id);
 			ResultSet resultset = statement.executeQuery();
 			while (resultset.next()) {
@@ -54,8 +58,8 @@ public class CustomerDAO extends DataAccessObject<Customer> {
 
 	@Override
 	public Customer update(Customer dto) {
-		Customer customer=null;
-		try (PreparedStatement statement = this.connection.prepareStatement(UPDATE);) {
+		Customer customer = null;
+		try (PreparedStatement statement = this.connection.prepareStatement(UPDATE)) {
 			statement.setString(1, dto.getFirstname());
 			statement.setString(2, dto.getLastname());
 			statement.setString(3, dto.getEmail());
@@ -71,12 +75,39 @@ public class CustomerDAO extends DataAccessObject<Customer> {
 			e.printStackTrace();
 			throw new RuntimeException(e);
 		}
-		 return customer;
+		return customer;
+	}
+
+	public List<Customer> finalALLSorted(int limit) {
+		List<Customer> customers = new ArrayList<>();
+		try (PreparedStatement statement = this.connection.prepareStatement(GET_ALL_LIMIT)) {
+			statement.setInt(1, limit);
+			ResultSet rs = statement.executeQuery();
+			while (rs.next()) {
+				Customer customer = new Customer();
+				customer.setId(rs.getLong("customer_id"));
+				customer.setFirstname(rs.getString("first_name"));
+				customer.setLastname(rs.getString("last_name"));
+				customer.setEmail(rs.getString("email"));
+				customer.setPhone(rs.getString("phone"));
+				customer.setAddress(rs.getString("address"));
+				customer.setCity(rs.getString("city"));
+				customer.setState(rs.getString("state"));
+				customer.setZipcode(rs.getString("zipcode"));
+				customers.add(customer);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+			throw new RuntimeException(e);
+		}
+
+		return customers;
+
 	}
 
 	@Override
 	public Customer create(Customer dto) {
-		try (PreparedStatement statement = this.connection.prepareStatement(INSERT);) {
+		try (PreparedStatement statement = this.connection.prepareStatement(INSERT)) {
 			statement.setString(1, dto.getFirstname());
 			statement.setString(2, dto.getLastname());
 			statement.setString(3, dto.getEmail());
@@ -96,16 +127,16 @@ public class CustomerDAO extends DataAccessObject<Customer> {
 
 	@Override
 	public void delete(long id) {
-		try (PreparedStatement statement = this.connection.prepareStatement(DELETE);) {
-			
+		try (PreparedStatement statement = this.connection.prepareStatement(DELETE)) {
+
 			statement.setLong(1, id);
 			statement.execute();
-			
+
 		} catch (SQLException e) {
 			e.printStackTrace();
 			throw new RuntimeException(e);
 		}
-		System.out.println("Customer Id: "+id+" has been deleted.");
+		System.out.println("Customer Id: " + id + " has been deleted.");
 	}
 
 }
