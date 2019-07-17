@@ -37,7 +37,7 @@ public class JDBCExecutorTest {
 		Assert.assertNotNull(customerDAO, "unable to get the Customer DAO");
 	}
 
-	@Test
+	@Test(priority=1)
 	public void createAnEntryToDatabaseTest() {
 		// Creating Customer Values
 
@@ -56,16 +56,16 @@ public class JDBCExecutorTest {
 
 	}
 
-	@Test
-	public void ReadEntriesFromDatabaseTest() {
+	@Test(priority=2)
+	public void readEntriesFromDatabaseTest() {
 		Customer customer = customerDAO.findById(197);
 		Assert.assertNotNull(customer, "Something went wrong. Could not rertieve the Customer data");
 
 		System.out.println(customer.getFirstname() + " " + customer.getLastname());
 	}
 
-	@Test
-	public void UpdatingEntriesinTheDatabaseTest() {
+	@Test(priority=3)
+	public void updatingEntriesinTheDatabaseTest() {
 		Customer customer = customerDAO.findById(1000);
 		System.out.println(customer.getFirstname() + " " + customer.getLastname() + " " + customer.getEmail());
 
@@ -75,8 +75,8 @@ public class JDBCExecutorTest {
 		System.out.println(customer.getFirstname() + " " + customer.getLastname() + " " + customer.getEmail());
 	}
 
-	@Test
-	public void DeletingEntriesFromTheDatabaseTest() {
+	@Test(priority=4)
+	public void deletingEntriesFromTheDatabaseTest() {
 
 		// Deleting an entry
 		Customer customer = new Customer();
@@ -96,6 +96,6 @@ public class JDBCExecutorTest {
 
 	@AfterClass
 	public void afterClass() {
-		System.out.println("Generating the Report");
+		System.out.println("\n JDBCExecutorTest Complete. \n Generating the Report");
 	}
 }
