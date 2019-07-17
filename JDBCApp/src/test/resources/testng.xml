@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<suite name="JDBC Executor Test Suite" verbose="1">
+  <test name="JDBC Executor Test">
+    <classes>
+      <class name="com.test.jdbc.executor.JDBCExecutorTest" />
+      <!--<class name="com.test.jdbc.executor.TestNGTest" /> -->
+    </classes>
+  </test>
+  <listeners>
+
+<listener class-name="org.uncommons.reportng.HTMLReporter" />
+
+<listener class-name="org.uncommons.reportng.JUnitXMLReporter" />
+
+</listeners>
+</suite>
